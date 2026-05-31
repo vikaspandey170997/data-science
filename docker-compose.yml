@@ -1,0 +1,20 @@
+services:
+  api:
+    build: .
+    container_name: data-science-api
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "127.0.0.1:8000:8000"
+    env_file:
+      - ./api_project/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./api_project:/app
+    develop:
+      watch:
+        - path: ./api_project
+          action: sync
+          target: /app
+        - path: ./api_project/pyproject.toml
+          action: rebuild
